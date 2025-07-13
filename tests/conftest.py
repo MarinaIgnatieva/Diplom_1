@@ -2,11 +2,6 @@ from unittest.mock import MagicMock
 import pytest
 from praktikum.burger import Burger
 
-
-@pytest.fixture
-def burger():
-    return Burger()
-
 @pytest.fixture
 def bun():
     bun_mock = MagicMock()
