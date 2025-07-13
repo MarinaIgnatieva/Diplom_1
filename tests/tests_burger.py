@@ -1,39 +1,41 @@
+from unittest.mock import MagicMock
+
 import pytest
 
 from data import TestData
 
 
+
 class TestBurger:
-    def test_add_new_buns(self, burger):
-        burger.set_buns(TestData.bun)
+    def test_add_new_buns(self, burger,bun):
+        burger.set_buns(bun)
 
-        assert burger.bun == TestData.bun
+        assert burger.bun == bun
 
-    def test_get_ingredient(self, burger):
-        for ingr in [TestData.ingredient_1, TestData.ingredient_2]:
-            burger.add_ingredient(ingr)
+    def test_get_ingredient(self, burger, ingredient):
+        burger.add_ingredient(ingredient)
 
-        assert (len(burger.ingredients) == 2 and
-                TestData.ingredient_1 in burger.ingredients and
-                TestData.ingredient_1 in burger.ingredients)
+        assert (len(burger.ingredients) == 1 and
+                ingredient in burger.ingredients)
 
-    def test_remove_ingredient(self, burger):
-        for ingr in [TestData.ingredient_1, TestData.ingredient_2]:
-            burger.add_ingredient(ingr)
-
+    def test_remove_ingredient(self, burger, ingredient):
+        burger.add_ingredient(ingredient)
         burger.remove_ingredient(0)
 
-        assert (len(burger.ingredients) == 1 and TestData.ingredient_2 in burger.ingredients and
-                TestData.ingredient_1 not in burger.ingredients)
+        assert burger.ingredients == []
 
     def test_move_ingredient(self,burger):
-        for ingr in [TestData.ingredient_1, TestData.ingredient_2]:
-            burger.add_ingredient(ingr)
+        ingredient1 = MagicMock()
+        ingredient1.get_name.return_value = "Салат"
+        ingredient2 = MagicMock()
+        ingredient2.get_name.return_value = "Горчица"
 
-        burger.move_ingredient(0,1)
+        burger.add_ingredient(ingredient1)
+        burger.add_ingredient(ingredient2)
 
-        assert (burger.ingredients.index(TestData.ingredient_1) == 1 and
-                burger.ingredients.index(TestData.ingredient_2) == 0)
+        burger.move_ingredient(0, 1)  # перемещаем Салат на второй индекс
+        assert burger.ingredients == [ingredient2, ingredient1]  # Порядок должен быть: Горчица, Салат
+
 
     @pytest.mark.parametrize('data', [TestData.one_bun_one_ingredient,
                              TestData.one_bun_none_ingredient,
