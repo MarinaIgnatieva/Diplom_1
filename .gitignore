@@ -1,0 +1,5 @@
+.idea/
+__pycache__/
+praktikum/__pycache__/
+tests/.coverage
+tests/__pycache__/
